@@ -54,15 +54,18 @@ export const deleteTodo = async (req, res) => {
 export const updateTodo = async (req, res) => {
     try {
         const { id } = req.params;
+        const { title, description, completed } = req.body
 
-        const updateTodo = await Todo.findByIdAndUpdate(id, {
-            new: true
-        });
+        const updatedTodo = await Todo.findByIdAndUpdate(
+            id, 
+            { title, description, completed }, // Campos a actualizar
+            { new: true } // Para devolver el documento actualizado
+        );
 
-        if (!updateTodo) {
+        if (!updatedTodo) {
             return res.status(400).json( {message: "Usuario no encontrado" } );
         }
-        res.status(200).json({ message: "Tarea actualizada con éxito"});
+        res.status(200).json({ message: "Tarea actualizada con éxito", updatedTodo});
     } catch (error) {
         res.status(500).json({ message: "Error en el servidor", error });
     }
